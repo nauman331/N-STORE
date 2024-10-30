@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { logindata } from "../../helpers/forms";
 
 const login = () => {
+  const navigate = useNavigate()
 
   const [user, setUser] = useState({
     email : "",
@@ -31,19 +32,16 @@ const login = () => {
         },
         body: JSON.stringify(user)
     })
-  
     const res_data = await response.json();
-    console.log(res_data)
     if(response.ok){
         setUser({
             email : "",
             password : "",
         })
-        alert("Logged In successfuly")
+        navigate("/")
     }else{
-        alert(error)
+        console.log(res_data.msg)
     }
-    console.log(response);
   } catch (error) {
     console.log(error)
   }
