@@ -1,0 +1,75 @@
+@import "./colors";
+
+.auth-section {
+@extend %flex;
+  line-height: 2rem;
+  .left {
+    @extend %flex;
+  flex-direction: column;
+    background-color: $color;
+    color: $background;
+    width: 50%;
+    min-height: 100vh;
+  }
+  .right {
+    @extend %flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 50%;
+  min-height: 100vh;
+  }
+  form {
+    @extend %flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+    button {
+      background-color: $color;
+      color: $background;
+      border: $border;
+      padding: .5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      &:hover {
+        background-color: $background;
+        color: $color;
+        border: $border;
+      }
+    }
+   
+  .input {
+    border-radius: 5px;
+    border: $border;
+    @extend %flex;
+    height: 3rem;
+    width: 20rem;
+
+  input {
+    width: 100%;
+    border: none;
+    height: 100%;
+    padding-left: 3%;
+    background-color: $background;
+  }
+  .icon {
+    @extend %flex;
+    width: 15%;
+    height: 100%;
+    background-color: $color;
+    color: $background;
+  }
+
+}
+}
+}
+@media (max-width: 768px) {
+ .auth-section{
+    .left {
+      display: none;
+    }
+    .right {
+      width: 100%;
+    }
+   
+ }
+}
