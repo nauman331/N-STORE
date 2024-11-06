@@ -1,0 +1,56 @@
+@import "./colors";
+$height : calc(100vh - 4rem);
+$width : calc(100vw - 15rem);
+
+
+.admin-header {
+    background-color: $color;
+    color: $background;
+    border-bottom: 2px solid $background;
+    @extend %flex;
+    justify-content: space-between;
+    padding: 1rem;
+    .toggler {
+        cursor: pointer;
+    }
+}
+aside {
+    background-color: $color;
+    position: fixed;
+    height: $height;
+    width: 15rem;
+    display: flex;
+    flex-direction: column;
+    padding: 5rem 1rem;
+    gap: 1rem;
+    .dash-link {
+        @extend %flex;
+        justify-content: flex-start;
+        gap: 1rem;
+        text-decoration: none;
+        color: $background;
+    }
+}
+.admin-outlet {
+    height: $height;
+    width: $width;
+    margin-left: 15rem;
+    padding: 1rem;
+}
+
+@media (max-width: 768px) {
+        .close-adminnav {
+            left: -100%;
+            transition: left 1s ease-in-out;
+        }
+        .open-adminnav {
+            left: 0%;
+            transition: left 1s ease-in-out;
+        }
+        .admin-outlet {
+            width: 100%;
+            min-height: 100vh;
+            margin-left: 0%;
+        }
+    
+}

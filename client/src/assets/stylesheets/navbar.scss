@@ -1,0 +1,95 @@
+@import "./colors";
+
+header {
+    h5{
+        background-color: $orange;
+        text-align: center;
+        padding: .5rem;
+    }
+    nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: $color;
+        color: $background;
+        padding: 1rem;
+        .logo {
+            @extend %flex;
+            gap: 1rem;
+           img {
+            height: 3rem;
+            width: 3rem;
+            border-radius: 50%
+            }
+        }
+        ul {
+            @extend %flex;
+            gap: 3rem;
+            .search {
+                @extend %flex;
+                border-radius: 5px;
+                background-color: $background;
+                border: 2px solid $background;
+                input {
+                    padding: .5rem 3rem;
+                    background-color: transparent;
+                   border: none;
+                }
+                .search-icon {
+                    border-left: 2px solid $color;
+                    color: $color;
+                    width: 2rem;
+                    cursor: pointer;
+                }
+            }
+            li {
+                list-style-type: none;
+                @extend %flex;
+                gap: .3rem;
+                .link {
+                    text-decoration: none;
+                    color: $background;
+                    cursor: pointer;
+                    font-size: small;
+                }
+            }
+        }
+        .toggler {
+            display: none;
+        }
+    }
+    
+}
+
+@media (max-width: 1120px) {
+%navproperties {
+    flex-direction: column;
+    position: fixed;
+    justify-content: flex-start;
+    top: 7.5rem;
+    background-color: $color;
+    height: 80vh;
+    padding: 0% 1rem;
+    transition: left 1s ease-in-out;
+}
+
+    nav {
+        .open-nav {
+           @extend %navproperties;
+            left: 0%;
+        }
+        .close-nav {
+           @extend %navproperties;
+            left: -110%;
+        }
+        .search{
+            margin-top: 2rem;
+        }
+        .toggler {
+            display: block !important;
+            cursor: pointer;
+        }
+
+    }
+
+}

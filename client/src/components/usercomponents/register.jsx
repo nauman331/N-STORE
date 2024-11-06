@@ -1,11 +1,14 @@
 import { useState } from "react"
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {registerdata} from "../../helpers/forms"
 
 const register = () => {
+const navigate = useNavigate();
+
 const [user, setUser] = useState({
   username : "",
   email : "",
+  phone: "",
   password : "",
 
 })
@@ -38,13 +41,14 @@ try {
       setUser({
           username : "",
           email : "",
+          phone: "",
           password : "",
       })
       alert("Registered successfuly")
+      navigate("/auth/login")
   }else{
-      alert(error)
+      console.log(res_data.msg)
   }
-  console.log(response);
 } catch (error) {
   console.log(error)
 }

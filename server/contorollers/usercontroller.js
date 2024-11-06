@@ -1,23 +1,29 @@
 const userModel = require("../models/usermodel")
 const generateAccessToken = require('../helpers/generateAccessToken');
 const bcrypt = require("bcrypt")
+const productModel = require("../models/productModel")
 
 
 const register = async (req, res) => {
     try {
-        const {username, email, password} = req.body;
-    if (!username || !email || !password) {
+        const {username, email, password, phone} = req.body;
+    if (!username || !email || !password || !phone) {
         return res.status(400).json({msg: "Fill all the fields properly"})
     }
     const existingemail = await userModel.findOne({ email });
+    const existingPhone = await userModel.findOne({ phone });
     if(existingemail){
         return res.status(400).json({msg:"Email is already registerd!"});
     }
+    if(existingPhone){
+      return res.status(400).json({msg:"Phone Number is already registerd!"});
+  }
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const createdUser = await userModel.create({
         username,
         email,
+        phone,
         password: hashedPassword
     })
     res.status(200).json({
@@ -50,7 +56,6 @@ const login = async (req, res) => {
       if (passwordMatch) {
         return res.status(200).json({
           msg: "User logged in successfully",
-          userId: existingEmail._id.toString(),
           token: generateAccessToken(existingEmail),
         });
       } else {
@@ -62,16 +67,25 @@ const login = async (req, res) => {
   };
 
  
-  const user = async (req, res, next) => {
-    try {
-        const userData = req.user;
-        return res.status(200).json({ userData })
-    } catch (error) {
-        next(error)
-    }
+ const userdata = async (req, res) => {
+  try {
+
+    res.status(200).json({userdata:req.user})
+    
+  } catch (error) {
+    res.status(400).json({msg:"Can't access user data please login again"})
+  }
+ }
+
+ const getProducts = async (req, res) => {
+  try {
+    const products = await productModel.find();
+    res.status(200).json({products});
+    
+  } catch (error) {
+    res.status(400).json({msg: "Error in getting all products"})
+  }
 }
 
 
-
-
-module.exports = {register, login, user}
+module.exports = {register, login, userdata, getProducts}

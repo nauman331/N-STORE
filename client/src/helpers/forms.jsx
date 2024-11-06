@@ -1,4 +1,4 @@
-import { AtSign, KeyRound, User } from "lucide-react";
+import { AtSign, KeyRound, User, Phone, Upload, ClipboardType, LayoutList, HandCoins, Percent} from "lucide-react";
 
 
 const registerdata = [
@@ -13,6 +13,12 @@ const registerdata = [
     type: 'email',
     name: 'email',
     placeholder: 'Enter your email'
+  },
+  {
+    icon: <Phone />,
+    type: 'number',
+    name: 'phone',
+    placeholder: 'Enter your Phone Number'
   },
   {
     icon: <KeyRound />,
@@ -37,4 +43,37 @@ const logindata = [
     },
   ];
 
-export { registerdata, logindata };
+  const productdata = [
+    {
+      icon: <Upload />,
+      type: 'file',
+      name: 'image',
+      placeholder: 'Select image of Product'
+    },
+    {
+      icon: <ClipboardType />,
+      type: 'text',
+      name: 'title',
+      placeholder: 'Enter Title of Product'
+    },
+    {
+      icon: <LayoutList />,
+      type: 'text',
+      name: 'category',
+      placeholder: 'Enter Specified Category'
+    },
+    {
+      icon: <HandCoins />,
+      type: 'number',
+      name: 'price',
+      placeholder: 'Enter Price of Product'
+    },
+    {
+      icon: <Percent />,
+      type: 'number',
+      name: 'discountedprice',
+      placeholder: 'Enter discounted price(optional)'
+    },
+  ]
+
+export { registerdata, logindata, productdata };
