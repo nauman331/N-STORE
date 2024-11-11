@@ -52,7 +52,7 @@ const AddProduct = () => {
             const res_data = await response.json();
             console.log(res_data);
             if (response.ok) {
-                // Reset the product state
+                
                 setProduct({
                     title: "",
                     category: "",
