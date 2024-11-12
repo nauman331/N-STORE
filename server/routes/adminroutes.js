@@ -5,7 +5,8 @@ const adminMiddleware = require("../middlewares/adminMiddleware")
 const adminController = require("../contorollers/admincontroller")
 
 
-router.post("/newproduct",adminMiddleware, uploadMiddleware.single("image"), adminController.createProduct);
+router.post("/newproduct",adminMiddleware, uploadMiddleware.single("productimage"), adminController.createProduct);
+router.post("/newcarouselimage",adminMiddleware, uploadMiddleware.single("carouselimage"), adminController.addCarosel);
 router.post("/getproducts",adminMiddleware, adminController.getProducts);
 
 module.exports = router;

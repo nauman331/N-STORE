@@ -47,7 +47,7 @@ const logindata = [
     {
       icon: <Upload />,
       type: 'file',
-      name: 'image',
+      name: 'productimage',
       placeholder: 'Select image of Product'
     },
     {

@@ -30,6 +30,10 @@ const Home = () => {
       <div className="cards">
         {products.map((product) => (
           <div className="card" key={product.id}>
+            {
+              product.discountedprice ? <h5>Save {product.price - product.discountedprice} Rs</h5> : ""
+            }
+            
             <div className="imgBox">
               <img src={product.image} alt={product.title} className="product-image" />
             </div>

@@ -7,6 +7,7 @@ import Home from "./components/usercomponents/home"
 import AdminHome from "./pages/adminpages/adminHome"
 import AddProduct from "./components/admincomponents/addproduct"
 import ProtectedRoute from "./helpers/ProtectedRoute"
+import Dashboard from "./components/admincomponents/dashboard"
 
 
 function App() {
@@ -27,12 +28,8 @@ function App() {
       <Route path="register" element={<Register />} />
       </Route>
 
-      <Route path="/admin" element={
-        <ProtectedRoute>
-        <AdminHome />
-        </ProtectedRoute>
-        }>
-      <Route path="dashboard" element={""} />
+      <Route path="/admin" element={<AdminHome />}>
+      <Route path="dashboard" element={<Dashboard />} />
       <Route path="addproducts" element={<AddProduct />} />
       <Route path="editproducts" element={""} />
       <Route path="orderedproducts" element={""} />

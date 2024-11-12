@@ -1,25 +1,44 @@
-import img from "../../assets/images/logo.jpeg"
-import 'react-slideshow-image/dist/styles.css'
+import 'react-slideshow-image/dist/styles.css';
 import { Zoom } from 'react-slideshow-image';
+import { useEffect, useState } from "react";
 
-const carousel = () => {
+const Carousel = () => {
+  const [images, setImages] = useState([]); 
 
-    const images = [
-        img,
-        img,
-        img,
-      ];
+  const getCarousel = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/user/getcarousel", {
+        method: 'GET',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setImages(data.carousel);
+      }
+    } catch (error) {
+      console.log("Error in getting carousel");
+    }
+  };
+
+  useEffect(() => {
+    getCarousel();
+  }, []);
 
   return (
+    <div className="slide-container">
+      <Zoom scale={0.4}>
+        {
+          images.map((each) => (
+            <img
+              key={each._id} 
+              className='carousel-image'
+              src={each.carouselImage}
+              alt={each.title}
+            />
+          ))
+        }
+      </Zoom>
+    </div>
+  );
+};
 
-<div className="slide-container">
-        <Zoom scale={0.4}>
-          {
-            images.map((each, index) => <img key={index} style={{width: "100%", height: '80vh'}} src={each} />)
-          }
-        </Zoom>
-      </div>
-  )
-}
-
-export default carousel
+export default Carousel;

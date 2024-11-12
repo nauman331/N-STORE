@@ -5,15 +5,24 @@
   gap: 1rem;
   padding: 1rem;
   flex-wrap: wrap;
+  .card {
+    position: relative;
+    width: 18rem;
+    height: 30rem;
+    background: $color;
+    border-radius: 5px;
+    overflow: hidden;
+    h5 {
+      background-color: $color;
+      color: $background;
+      position: relative;
+      width: 40%;
+      top: 2%;
+      padding-left: .3rem;
+    }
+  }
 }
-.card {
-  position: relative;
-  width: 18rem;
-  height: 30rem;
-  background: $color;
-  border-radius: 5px;
-  overflow: hidden;
-}
+
 
 .card::before {
   content: "";

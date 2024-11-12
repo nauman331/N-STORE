@@ -6,6 +6,7 @@ const authenticateToken = require('../middlewares/authMiddleware');
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.get('/getproducts', authController.getProducts)
+router.get('/getcarousel', authController.getCarousel)
 router.get('/userdata', authenticateToken, authController.userdata)
 
 module.exports = router;

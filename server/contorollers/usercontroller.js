@@ -2,6 +2,7 @@ const userModel = require("../models/usermodel")
 const generateAccessToken = require('../helpers/generateAccessToken');
 const bcrypt = require("bcrypt")
 const productModel = require("../models/productModel")
+const carouselModel = require("../models/carouselModel")
 
 
 const register = async (req, res) => {
@@ -87,5 +88,15 @@ const login = async (req, res) => {
   }
 }
 
+const getCarousel = async (req, res) => {
+  try {
+    const carousel = await carouselModel.find();
+    res.status(200).json({carousel});
+    
+  } catch (error) {
+    res.status(400).json({msg: "Error in getting Carousel Images"})
+  }
+}
 
-module.exports = {register, login, userdata, getProducts}
+
+module.exports = {register, login, userdata, getProducts, getCarousel}
