@@ -1,6 +1,5 @@
 @import "./colors";
-$height : calc(100vh - 4rem);
-$width : calc(100vw - 15rem);
+$width : calc(100vw - 16rem);
 
 
 .admin-header {
@@ -17,7 +16,7 @@ $width : calc(100vw - 15rem);
 aside {
     background-color: $color;
     position: fixed;
-    height: $height;
+    height: 100vh;
     width: 15rem;
     display: flex;
     flex-direction: column;
@@ -29,13 +28,15 @@ aside {
         gap: 1rem;
         text-decoration: none;
         color: $background;
+        cursor: pointer;
     }
 }
 .admin-outlet {
-    height: $height;
+    min-height: 100vh;
     width: $width;
     margin-left: 15rem;
     padding: 1rem;
+    margin-top: 3rem;
 }
 
 .carousel-image {

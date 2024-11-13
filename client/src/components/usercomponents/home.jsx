@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Carousel from './carousel';
 import "../../assets/stylesheets/products.scss";
+import {ShoppingCart} from "lucide-react"
 
 const Home = () => {
-  const [products, setProducts] = useState([]); // Set initial state as an empty array
+  const [products, setProducts] = useState([]); 
 
   const getAllProducts = async () => {
     try {
@@ -50,7 +51,7 @@ const Home = () => {
                   <>{product.price} Rs</>
                 )}
               </h2>
-              <a href="#" className="buy">Add to Cart</a>
+              <a href='/home' className="buy"> Add to Cart <ShoppingCart /></a>
             </div>
           </div>
         ))}

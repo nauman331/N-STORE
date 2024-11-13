@@ -7,6 +7,7 @@ const adminController = require("../contorollers/admincontroller")
 
 router.post("/newproduct",adminMiddleware, uploadMiddleware.single("productimage"), adminController.createProduct);
 router.post("/newcarouselimage",adminMiddleware, uploadMiddleware.single("carouselimage"), adminController.addCarosel);
-router.post("/getproducts",adminMiddleware, adminController.getProducts);
+router.delete("/deleteproduct",adminMiddleware, adminController.deleteProduct);
+router.delete("/deletecarousel",adminMiddleware, adminController.deleteCarousel);
 
 module.exports = router;

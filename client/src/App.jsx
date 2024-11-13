@@ -14,6 +14,7 @@ function App() {
 
   return (
     <>
+      <ProtectedRoute>
     <Routes>
       <Route path="/" element={<HomePage />} >
       <Route path="home" element={<Home />} />
@@ -34,9 +35,8 @@ function App() {
       <Route path="editproducts" element={""} />
       <Route path="orderedproducts" element={""} />
       </Route>
-
-      
     </Routes>
+      </ProtectedRoute>
     </>
   )
 }

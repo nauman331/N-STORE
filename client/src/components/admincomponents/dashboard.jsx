@@ -1,12 +1,14 @@
 import { ClipboardType, File } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import Editcarousel from "./editcarousel";
 
 const Dashboard = () => {
   const token = useSelector((state) => state.auth.token);
   const authorizationToken = `Bearer ${token}`;
   const [title, setTitle] = useState("");
   const [carouselimage, setCarouselimage] = useState(null);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,14 +28,14 @@ const Dashboard = () => {
           headers: {
             Authorization: authorizationToken,
           },
-          body: formData, // Use FormData instead of JSON
+          body: formData,
         }
       );
 
       const res_data = await response.json();
       console.log(res_data);
       if (response.ok) {
-        settitle("");
+        setTitle("");
         setCarouselimage(null);
         alert("Carousel Image Uploaded");
       } else {
@@ -44,16 +46,18 @@ const Dashboard = () => {
     }
   };
 
+  
+  
+
   return (
     <>
     <h1 className="addproduct-heading">Add Carousel Images</h1>
-  
     <div className="auth-section">
       <form onSubmit={handleSubmit}>
         <div className="input">
           <span className="icon">
             <File />
-          </span>
+            </span>
           <input
             type="file"
             name="carouselimage"
@@ -76,6 +80,8 @@ const Dashboard = () => {
       </form>
     </div>
     <hr style={{marginTop: "2rem"}}/>
+    <h1 className="addproduct-heading">Edit Carousel Images</h1>
+    <Editcarousel />
     </>
   );
 };

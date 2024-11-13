@@ -1,11 +1,10 @@
 import { useState } from "react"
-import { NavLink, useNavigate} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { logindata } from "../../helpers/forms";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../store/slices/authSlice";
 
 const login = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [user, setUser] = useState({
     email : "",
@@ -45,7 +44,6 @@ const login = () => {
     
           console.log(res_data.msg);
           dispatch(setCredentials({ token: res_data.token}));
-          navigate("/home")
 
         } else {
           console.log(res_data.msg);

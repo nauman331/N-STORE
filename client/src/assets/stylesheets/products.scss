@@ -12,6 +12,7 @@
     background: $color;
     border-radius: 5px;
     overflow: hidden;
+    border: $border;
     h5 {
       background-color: $color;
       color: $background;
@@ -30,7 +31,7 @@
   top: -60%;
   width: 100%;
   height: 100%;
-  background: $orange;
+  background: $background;
   transform: skewY(345deg);
   transition: 0.5s;
 }
@@ -58,7 +59,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 4rem;
+  padding-top: 3rem;
   z-index: 1;
   img{
     height: 15rem;
@@ -99,6 +100,7 @@
 }
 
 .card .contentBox .buy {
+  @extend %flex;
   position: relative;
   top: 100px;
   opacity: 0;
@@ -106,7 +108,7 @@
   margin-top: 15px;
   color: $color;
   text-decoration: none;
-  background: $orange;
+  background: $background;
   border-radius: 5px;
   text-transform: uppercase;
   letter-spacing: 1px;

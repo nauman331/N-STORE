@@ -6,18 +6,21 @@ import {
   ShoppingBag,
   SquarePlus,
   X,
-  Menu
+  Menu,
+  LogOut
 } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
+import { logOut } from "../../store/slices/authSlice";
 
 const adminnav = () => {
   const [open, setOpen] = useState(false);
   const userdata = useSelector((state)=>state.auth.userdata)
+  const dispatch = useDispatch();
   return (
     <>
     <header className="admin-header">
-    <h3>{userdata.username}</h3>
+    <h3>{userdata ? userdata.username : "Guest"}</h3>
           {open ? <X onClick={(()=>setOpen(false))} className="toggler"/> : <Menu onClick={(()=>setOpen(true))} className="toggler"/>}
     </header>
     <aside className={open ? "open-adminnav" : "close-adminnav"}>
@@ -37,6 +40,10 @@ const adminnav = () => {
         <ShoppingBag />
         <span>Ordered Products</span>
       </NavLink>
+      <h5 className="dash-link" onClick={(()=>dispatch(logOut()))}>
+        <LogOut />
+        <span>Log Out</span>
+      </h5>
     </aside>
     </>
   );

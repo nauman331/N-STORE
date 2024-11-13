@@ -45,16 +45,6 @@ const createProduct = async (req, res) => {
 };
 
 
-const getProducts = async (req, res) => {
-  try {
-    const products = await productModel.find();
-    res.status(200).json({products});
-    
-  } catch (error) {
-    res.status(400).json({msg: "Error in getting all products"})
-  }
-}
-
 const addCarosel = async (req, res) => {
     try {
         const {link} = req.body
@@ -81,14 +71,31 @@ const addCarosel = async (req, res) => {
     }
 }
 
-const getCarousel = async (req, res) => {
+const deleteProduct = async (req, res) => {
     try {
-      const carousel = await carouselModel.find();
-      res.status(200).json({carousel});
-      
+      const {id} = req.body;
+          if(!id) {return res.status(400).json({msg: "Error in getting the required product"})};
+      await productModel.deleteOne({_id: id});
+      res.status(200).json({ msg: "Product deleted successfully" });
     } catch (error) {
-      res.status(400).json({msg: "Error in getting Carousel Images"})
+      res.status(400).json({msg: "Error in getting all products", error: error.message})
     }
   }
 
-module.exports = { createProduct, getProducts, addCarosel, getCarousel };
+const deleteCarousel = async (req, res) => {
+    try {
+        const { id } = req.body;
+        if (!id) {
+            return res.status(400).json({ msg: "Error in getting the required carousel" });
+        }
+        await carouselModel.deleteOne({ _id: id });
+        res.status(200).json({ msg: "Carousel deleted successfully" });
+    } catch (error) {
+        console.error(error);  
+        res.status(500).json({ msg: "Error in deleting Carousel Images", error: error.message });
+    }
+};
+
+
+
+module.exports = { createProduct, deleteProduct, addCarosel, deleteCarousel };
