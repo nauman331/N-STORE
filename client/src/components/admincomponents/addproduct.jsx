@@ -18,7 +18,7 @@ const AddProduct = () => {
         const value = e.target.value;
 
         // For image input, set the file to the state
-        if (name === 'image') {
+        if (name === 'productimage') {
             setProduct({
                 ...product,
                 [name]: e.target.files[0] // Set the selected file
