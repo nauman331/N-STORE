@@ -1,6 +1,6 @@
 import { Trash2 } from 'lucide-react';
-import React from 'react'
-import { useSelector, useState, useEffect } from 'react-redux';
+import {useState, useEffect} from 'react'
+import { useSelector } from 'react-redux';
 
 const editproducts = () => {
     const token = useSelector((state) => state.auth.token);
