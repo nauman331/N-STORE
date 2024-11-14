@@ -6,7 +6,6 @@ import Editcarousel from "./editcarousel";
 const Dashboard = () => {
   const token = useSelector((state) => state.auth.token);
   const authorizationToken = `Bearer ${token}`;
-  const [title, setTitle] = useState("");
   const [carouselimage, setCarouselimage] = useState(null);
 
 
@@ -15,10 +14,6 @@ const Dashboard = () => {
 
     const formData = new FormData();
     formData.append("carouselimage", carouselimage);
-
-    if (title) {
-      formData.append("title", title);
-    }
 
     try {
       const response = await fetch(
@@ -35,7 +30,6 @@ const Dashboard = () => {
       const res_data = await response.json();
       console.log(res_data);
       if (response.ok) {
-        setTitle("");
         setCarouselimage(null);
         alert("Carousel Image Uploaded");
       } else {
@@ -62,18 +56,6 @@ const Dashboard = () => {
             type="file"
             name="carouselimage"
             onChange={(e) => setCarouselimage(e.target.files[0])}
-          />
-        </div>
-        <div className="input">
-          <span className="icon">
-          <ClipboardType />
-          </span>
-          <input
-            type="text"
-            name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Enter title (Optional)"
           />
         </div>
         <button type="submit">Submit</button>

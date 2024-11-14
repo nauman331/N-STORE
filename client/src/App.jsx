@@ -8,6 +8,7 @@ import AdminHome from "./pages/adminpages/adminHome"
 import AddProduct from "./components/admincomponents/addproduct"
 import ProtectedRoute from "./helpers/ProtectedRoute"
 import Dashboard from "./components/admincomponents/dashboard"
+import Editproducts from "./components/admincomponents/editproducts"
 
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
       <Route path="/admin" element={<AdminHome />}>
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="addproducts" element={<AddProduct />} />
-      <Route path="editproducts" element={""} />
+      <Route path="editproducts" element={<Editproducts />} />
       <Route path="orderedproducts" element={""} />
       </Route>
     </Routes>

@@ -5,9 +5,6 @@ const carouselSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    title : {
-        type: String
-    }
 })
 
 const CarouselSchema = new mongoose.model("Carousel", carouselSchema);

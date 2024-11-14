@@ -47,7 +47,6 @@ const createProduct = async (req, res) => {
 
 const addCarosel = async (req, res) => {
     try {
-        const {link} = req.body
         if (!req.file) {
             return res.status(400).json({ msg: 'No file uploaded' });
         }
@@ -59,7 +58,6 @@ const addCarosel = async (req, res) => {
 
         await carouselModel.create({
             carouselImage,
-            link
         })
         res.status(200).json({msg: "Carousel Image Uploaded Successfully!"})
 
