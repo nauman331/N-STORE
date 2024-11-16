@@ -53,7 +53,7 @@ const AddProduct = () => {
             console.log(res_data);
             if (response.ok) {
                 
-                await setProduct({
+                 setProduct({
                     title: "",
                     category: "",
                     price: "",

@@ -9,6 +9,7 @@ import AddProduct from "./components/admincomponents/addproduct"
 import ProtectedRoute from "./helpers/ProtectedRoute"
 import Dashboard from "./components/admincomponents/dashboard"
 import Editproducts from "./components/admincomponents/editproducts"
+import "react-popupify/dist/bundle.css";
 
 
 function App() {

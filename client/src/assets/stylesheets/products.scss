@@ -1,11 +1,18 @@
 @import "./colors";
 
-.cards {
+
+
+#customPopupId {
+  background-color: $background;
+  color: $color;
+  padding: 2rem;
+}
+.product-cards {
   @extend %flex;
   gap: 1rem;
   padding: 1rem;
   flex-wrap: wrap;
-  .card {
+  .product-card {
     position: relative;
     width: 18rem;
     height: 30rem;
@@ -13,19 +20,34 @@
     border-radius: 5px;
     overflow: hidden;
     border: $border;
-    h5 {
-      background-color: $color;
-      color: $background;
+    
+    .edit {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      top: 3%;
       position: relative;
-      width: 40%;
-      top: 2%;
-      padding-left: .3rem;
+      .edit-icon {
+        background-color: $color;
+        color: $background;
+        margin-right: 2%;
+        @extend %flex;
+        cursor: pointer;
+        border-radius: 50%;
+        padding: .3rem;
+      }
+      h5 {
+        background-color: $color;
+        color: $background;
+        width: 40%;
+        padding-left: .3rem;
+      }
     }
   }
 }
 
 
-.card::before {
+.product-card::before {
   content: "";
   position: absolute;
   top: -60%;
@@ -36,12 +58,12 @@
   transition: 0.5s;
 }
 
-.card:hover::before {
+.product-card:hover::before {
   top: -70%;
   transform: skewY(390deg);
 }
 
-.card::after {
+.product-card::after {
   content: "N-STORE";
   position: absolute;
   bottom: 0;
@@ -53,7 +75,7 @@
   color: rgba(0, 0, 0, 0.1);
 }
 
-.card .imgBox {
+.product-card .imgBox {
   position: relative;
   width: 100%;
   display: flex;
@@ -68,7 +90,7 @@
 }
 
 
-.card .contentBox {
+.product-card .contentBox {
   position: relative;
   padding: 20px;
   @extend %flex;
@@ -76,7 +98,7 @@
   z-index: 2;
 }
 
-.card .contentBox h3 {
+.product-card .contentBox h3 {
   font-size: 18px;
   color: $background;
   font-weight: 500;
@@ -84,7 +106,7 @@
   letter-spacing: 1px;
 }
 
-.card .contentBox .price {
+.product-card .contentBox .price {
     @extend %flex;
    gap: 3rem;
   font-size: 20px;
@@ -93,13 +115,13 @@
   letter-spacing: 1px;
   margin-top: 1rem;
 }
-.card .contentBox .original-price {
+.product-card .contentBox .original-price {
     text-decoration: line-through;
     font-size: 15px;
     color: gray;
 }
 
-.card .contentBox .buy {
+.product-card .contentBox .buy {
   @extend %flex;
   position: relative;
   top: 100px;
@@ -113,9 +135,12 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: 0.5s;
+  cursor: pointer;
+  border: none;
+  font-weight: 700;
 }
 
-.card:hover .contentBox .buy {
+.product-card:hover .contentBox .buy {
   top: 0;
   opacity: 1;
 }

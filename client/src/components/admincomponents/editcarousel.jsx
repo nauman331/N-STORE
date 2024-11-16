@@ -37,9 +37,6 @@ const EditCarousel = () => {
                 const data = await response.json();
                 console.log("Carousel image deleted successfully!", data);
                 getCarousel();  
-            } else {
-                const errorText = await response.text();
-                console.error("Failed to delete image. Status:", response.status, "Response:", errorText);
             }
         } catch (error) {
             console.log("Error in deleting image", error);

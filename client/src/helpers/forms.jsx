@@ -1,4 +1,4 @@
-import { AtSign, KeyRound, User, Phone, Upload, ClipboardType, LayoutList, HandCoins, Percent} from "lucide-react";
+import { AtSign, KeyRound, User, Phone, Upload, ClipboardType, LayoutList, HandCoins, Percent, ChartNoAxesCombined} from "lucide-react";
 
 
 const registerdata = [
@@ -61,6 +61,12 @@ const logindata = [
       type: 'text',
       name: 'category',
       placeholder: 'Enter Specified Category'
+    },
+    {
+      icon: <ChartNoAxesCombined />,
+      type: 'number',
+      name: 'stock',
+      placeholder: 'Enter Total Stock'
     },
     {
       icon: <HandCoins />,

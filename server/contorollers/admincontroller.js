@@ -5,15 +5,15 @@ const carouselModel = require("../models/carouselModel")
 
 const createProduct = async (req, res) => {
     try {
-        const { title, category, price, discountedprice } = req.body;
+        const { title, category, price, discountedprice, stock } = req.body;
 
-        // Check if a file was uploaded
+       
         if (!req.file) {
             return res.status(400).json({ msg: 'No file uploaded' });
         }
 
-        // Check if required fields are present
-        if (!title || !category || !price) {
+       
+        if (!title || !category || !price || !stock) {
             return res.status(400).json({ msg: 'Fill all the fields properly' });
         }
 
@@ -30,16 +30,17 @@ const createProduct = async (req, res) => {
             category,
             price,
             discountedprice,
+            stock,
             image: imgURL
         });
 
         // Send success response
         res.status(200).json({ msg: "Product uploaded successfully" });
     } catch (error) {
+        if (req.file) fs.unlinkSync(req.file.path);
         console.error("Error in uploading product:", error);
         res.status(400).json({ msg: "Error in uploading new product", error });
     } finally {
-        // Delete file from server after upload attempt
         if (req.file) fs.unlinkSync(req.file.path);
     }
 };
@@ -62,9 +63,10 @@ const addCarosel = async (req, res) => {
         res.status(200).json({msg: "Carousel Image Uploaded Successfully!"})
 
     } catch (error) {
+        if (req.file) fs.unlinkSync(req.file.path);
         return res.status(400).json({msg: "Error occured while uploading", error})
     } finally {
-        // Delete file from server after upload attempt
+     
         if (req.file) fs.unlinkSync(req.file.path);
     }
 }
@@ -94,6 +96,14 @@ const deleteCarousel = async (req, res) => {
     }
 };
 
+const editProduct = async (req,res) => {
+    try {
+        
+    } catch (error) {
+        res.status(400).json({msg: "Error in Editing", error})
+    }
+}
 
 
-module.exports = { createProduct, deleteProduct, addCarosel, deleteCarousel };
+
+module.exports = { createProduct, deleteProduct, addCarosel, deleteCarousel, editProduct };

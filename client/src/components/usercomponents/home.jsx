@@ -28,9 +28,9 @@ const Home = () => {
   return (
     <>
       <Carousel />
-      <div className="cards">
+      <div className="product-cards">
         {products.map((product) => (
-          <div className="card" key={product.id}>
+          <div className="product-card" key={product.id}>
             {
               product.discountedprice ? <h5>Save {product.price - product.discountedprice} Rs</h5> : ""
             }
