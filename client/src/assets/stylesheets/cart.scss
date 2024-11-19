@@ -1,0 +1,45 @@
+@import "./colors";
+
+.cart-boxes {
+    @extend %flex;
+    flex-direction: column;
+    gap: 1rem;
+.cart-box {
+    box-shadow:  5px 5px 18px #bababa,
+             -5px -5px 18px #ffffff;
+             width: 90%;
+             height: 10rem;
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             padding: .5rem;
+             border-radius: 5px;
+             img {
+                height: 10rem;
+                width: 10rem;
+             }
+             .delete {
+                color: $orange;
+                cursor: pointer;
+                
+             }
+}
+}
+
+
+@media (max-width: 768px) {
+    .cart-box {
+        font-size: smaller;
+        position: relative;
+        img{
+            height: 5rem !important;
+            width: 5rem !important;
+            margin-right: .5rem;
+        }
+        .delete {
+            position: absolute;
+                top: 5%;
+                right: 3%;
+        }
+    }
+}

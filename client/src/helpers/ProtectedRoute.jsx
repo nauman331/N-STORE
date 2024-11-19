@@ -11,19 +11,19 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     switch (true) {
-      case !token && !pathname.startsWith("/auth"):
+      case pathname === "/":
+        navigate("/home", { replace: true });
+        break;
+      case !token && !pathname.startsWith("/auth") && pathname !== "/home":
         navigate("/auth/login", { replace: true });
         break;
       case token && pathname.startsWith("/auth"):
-        navigate("/home", { replace: true });
+        navigate("/profile", { replace: true });
         break;
       case token && userdata?.isAdmin && !pathname.startsWith("/admin"):
         navigate("/admin", { replace: true });
         break;
       case token && !userdata?.isAdmin && pathname.startsWith("/admin"):
-        navigate("/home", { replace: true });
-        break;
-      case pathname === "/":
         navigate("/home", { replace: true });
         break;
       default:

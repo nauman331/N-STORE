@@ -98,5 +98,104 @@ const getCarousel = async (req, res) => {
   }
 }
 
+const addToCart = async (req, res) => {
+  try {
+    const { productId, quantity } = req.body;
 
-module.exports = {register, login, userdata, getProducts, getCarousel}
+    if (!productId) {
+      return res.status(400).json({ msg: "ProductId is required" });
+    }
+
+    const product = await productModel.findById(productId);
+    if (!product) {
+      return res.status(404).json({ msg: "Product Not Found!" });
+    }
+
+    const user = await userModel.findById(req.user._id);
+    
+    if (!user) {
+      return res.status(404).json({ msg: "User Not Found Please Log In again!" });
+    }
+
+    // Check if the product is already in the cart
+    const existingCartItem = user.cart.find(
+      (item) => item.product.toString() === productId
+    );
+
+    if (existingCartItem) {
+      // If product exists, update the quantity
+      existingCartItem.quantity += quantity;
+    } else {
+      // If product does not exist, add it to the cart
+      user.cart.push({
+        product: productId,
+        quantity,
+      });
+    }
+
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({ msg: "Product added to cart", cart: user.cart });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Error in Adding to Cart", error: error.message });
+  }
+};
+
+const removeFromCart = async (req, res) => {
+  try {
+    const { productId } = req.body;
+
+    // Check if productId is provided
+    if (!productId) {
+      return res.status(400).json({ msg: "Product ID is required" });
+    }
+
+    // Find the user by ID
+    const user = await userModel.findById(req.user._id);
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ msg: "User not found. Please log in again!" });
+    }
+
+    // Find the product in the cart
+    const existingCartItem = user.cart.find(
+      (item) => item.product.toString() === productId
+    );
+
+    // Check if the product exists in the cart
+    if (!existingCartItem) {
+      return res.status(400).json({ msg: "Product is not in the cart" });
+    }
+
+    // Remove the product from the cart
+    user.cart = user.cart.filter(
+      (item) => item.product.toString() !== productId
+    );
+
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({ msg: "Product removed from cart", cart: user.cart });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Error in removing item from cart", error: error.message });
+  }
+};
+
+const getCart = async (req, res) => {
+  try {
+    const user = await userModel.findById(req.user._id).populate("cart.product");
+    if(!user) {
+      return res.status(400).json({msg: "User Not Found Please Log In again!"});
+    }
+    res.status(200).json({cart: user.cart})
+  } catch (error) {
+    res.status(400).json({msg: "Error in getting cart items"})
+  }
+}
+
+
+module.exports = {register, login, userdata, getProducts, getCarousel, addToCart, removeFromCart, getCart}

@@ -42,6 +42,14 @@
         width: 40%;
         padding-left: .3rem;
       }
+      .stock {
+        color: green;
+        padding: 3%;
+      }
+      .no-stock {
+        color: red;
+        padding: 3%;
+      }
     }
   }
 }
@@ -122,7 +130,6 @@
 }
 
 .product-card .contentBox .buy {
-  @extend %flex;
   position: relative;
   top: 100px;
   opacity: 0;
@@ -148,4 +155,28 @@
 .mouse {
   height: 300px;
   width: auto;
+}
+
+.select-quantity {
+  @extend %flex;
+  gap: 1rem;
+  button {
+    background-color: $color;
+    color: $background;
+    cursor: pointer;
+    font-size: larger;
+    padding: .5rem 1rem;
+    border: none;
+    border-radius: 5px;
+  }
+}
+.add-to-cart {
+  background-color: $orange;
+  cursor: pointer;
+  font-size: larger;
+  padding: .5rem 1rem;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  margin-top: 2rem;
 }

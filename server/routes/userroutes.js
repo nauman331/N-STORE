@@ -8,5 +8,8 @@ router.post('/login', authController.login);
 router.get('/getproducts', authController.getProducts)
 router.get('/getcarousel', authController.getCarousel)
 router.get('/userdata', authenticateToken, authController.userdata)
+router.put('/addtocart', authenticateToken, authController.addToCart)
+router.post('/removefromcart', authenticateToken, authController.removeFromCart)
+router.get('/getcart', authenticateToken, authController.getCart)
 
 module.exports = router;

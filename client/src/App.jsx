@@ -9,6 +9,7 @@ import AddProduct from "./components/admincomponents/addproduct"
 import ProtectedRoute from "./helpers/ProtectedRoute"
 import Dashboard from "./components/admincomponents/dashboard"
 import Editproducts from "./components/admincomponents/editproducts"
+import Cart from "./pages/userpages/cart"
 import "react-popupify/dist/bundle.css";
 
 
@@ -21,7 +22,7 @@ function App() {
       <Route path="/" element={<HomePage />} >
       <Route path="home" element={<Home />} />
       <Route path="profile" element={""} />
-      <Route path="cart" element={""} />
+      <Route path="cart" element={<Cart />} />
       <Route path="checkout" element={""} />
       </Route>
 

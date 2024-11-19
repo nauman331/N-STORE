@@ -40,12 +40,12 @@ const navbar = () => {
               <NavLink to="/home" className='link'>HOME</NavLink>
             </li>
             <li>
-              <UserPen />
-              <NavLink to="/profile" className='link'>PROFILE</NavLink>
-            </li>
-            <li>
               <ShoppingCart />
               <NavLink to="/cart" className='link'>CART</NavLink>
+            </li>
+            <li>
+              <UserPen />
+              <NavLink to="/profile" className='link'>PROFILE</NavLink>
             </li>
             {token !== null ? (
               <li>

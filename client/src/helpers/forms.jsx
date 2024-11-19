@@ -82,4 +82,5 @@ const logindata = [
     },
   ]
 
+
 export { registerdata, logindata, productdata };

@@ -1,6 +1,8 @@
+import { useSelector} from "react-redux"
 import { useState } from "react";
 import { productdata } from "../../helpers/forms";
-import { useSelector} from "react-redux"
+
+
 
 const AddProduct = () => {
     const token = useSelector((state)=>state.auth.token);
@@ -13,15 +15,15 @@ const AddProduct = () => {
         image: null,
     });
 
+
     const handleInput = (e) => {
         const name = e.target.name;
         const value = e.target.value;
 
-        // For image input, set the file to the state
         if (name === 'productimage') {
             setProduct({
                 ...product,
-                [name]: e.target.files[0] // Set the selected file
+                [name]: e.target.files[0]
             });
         } else {
             setProduct({
@@ -41,7 +43,7 @@ const AddProduct = () => {
         });
 
         try {
-            const response = await fetch('http://localhost:3000/api/admin/newproduct', {
+            const response = await fetch("http://localhost:3000/api/admin/newproduct", {
                 method: 'POST',
                 headers:{
                     Authorization: authorizationToken
@@ -68,11 +70,12 @@ const AddProduct = () => {
             console.log(error);
         }
     };
+   
 
     return (
         <>
             <h1 className="addproduct-heading">Add Product</h1>
-        <div className="auth-section">
+            <div className="auth-section">
             <form onSubmit={handleSubmit}>
                 {productdata.map((data, index) => (
                     <div className="input" key={index}>

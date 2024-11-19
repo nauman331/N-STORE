@@ -9,5 +9,6 @@ router.post("/newproduct",adminMiddleware, uploadMiddleware.single("productimage
 router.post("/newcarouselimage",adminMiddleware, uploadMiddleware.single("carouselimage"), adminController.addCarosel);
 router.delete("/deleteproduct",adminMiddleware, adminController.deleteProduct);
 router.delete("/deletecarousel",adminMiddleware, adminController.deleteCarousel);
+router.put("/updateproduct",adminMiddleware, adminController.updateProduct);
 
 module.exports = router;

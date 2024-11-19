@@ -23,6 +23,24 @@ const userSchema = new mongoose.Schema({
     isAdmin : {
         type: Boolean,
         default: false
+    },
+    profile : {
+        type: String,
+        default: ""
+    },
+    cart : [
+    {
+        product : {
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "Product"
+        },
+        quantity : {
+            type: Number,
+            default: 1
+        },
+    }],
+    address : {
+        type: String,
     }
 })
 
