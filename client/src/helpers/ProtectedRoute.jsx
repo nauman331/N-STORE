@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
         navigate("/auth/login", { replace: true });
         break;
       case token && pathname.startsWith("/auth"):
-        navigate("/profile", { replace: true });
+        navigate("/home", { replace: true });
         break;
       case token && userdata?.isAdmin && !pathname.startsWith("/admin"):
         navigate("/admin", { replace: true });

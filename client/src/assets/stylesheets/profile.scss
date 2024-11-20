@@ -1,0 +1,106 @@
+@import "./colors";
+
+.profile-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: $background;
+    min-height: 100vh;
+  
+    .user-details {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      background-color: $background;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 600px;
+  
+      .user-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 20px;
+        border: $border;
+      }
+  
+      .user-info {
+        h3 {
+          margin-bottom: 5px;
+          color: $color;
+        }
+  
+        p {
+          margin: 0 0 10px;
+          color: $color;
+        }
+  
+        .btn {
+          background-color: $orange;
+          padding: 7px 12px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          border: 2px solid $orange;
+          &:hover {
+            background-color: transparent;
+            color: $orange;
+          }
+        }
+      }
+    }
+  
+    .orders {
+      width: 100%;
+      max-width: 600px;
+  
+      h2 {
+        margin-bottom: 20px;
+        color: $color;
+      }
+  
+      .order-item {
+        background-color: $background;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+        p {
+          margin: 5px 0;
+          color: #555;
+  
+          strong {
+            color: $color;
+          }
+        }
+      }
+    }
+  }
+  
+  // Media Queries
+  @media (max-width: 768px) {
+    .profile-page {
+      padding: 10px;
+  
+      .user-details {
+        flex-direction: column;
+        text-align: center;
+  
+        .user-avatar {
+          margin-bottom: 15px;
+        }
+      }
+  
+      .orders {
+        .order-item {
+          padding: 10px;
+        }
+      }
+    }
+  }
+  

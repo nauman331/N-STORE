@@ -1,6 +1,6 @@
 import React from "react";
 import "../../assets/stylesheets/footer.scss"
-
+import {Facebook, Instagram, Twitter, Youtube} from "lucide-react"
 const footer = () => {
   return (
     <>
@@ -38,10 +38,10 @@ const footer = () => {
       <div class="footer-col">
         <h4>Follow Us</h4>
         <div class="social-links">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><Facebook /></a>
+          <a href="#"><Twitter /></a>
+          <a href="#"><Instagram /></a>
+          <a href="#"><Youtube /></a>
         </div>
       </div>
     </div>

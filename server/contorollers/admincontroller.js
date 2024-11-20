@@ -112,7 +112,7 @@ const updateProduct = async (req, res) => {
         }
 
         // Check if at least one field is provided for updating
-        if (!title && !category && !price && !stock && !discountedprice && !req.file) {
+        if (!title && !category && !price && !stock && !discountedprice) {
             return res.status(400).json({ msg: 'At least one field is required to update' });
         }
 
@@ -128,18 +128,13 @@ const updateProduct = async (req, res) => {
 
        
 
-        // Update the product in the database
-        const updatedProduct = await productModel.findByIdAndUpdate(
+           await productModel.findByIdAndUpdate(
             id,
             updateFields,  // Only pass the fields that are updated
             { new: true }  // Return the updated product
         );
 
-        if (!updatedProduct) {
-            return res.status(404).json({ msg: "Product not found" });
-        }
-
-        res.status(200).json({ msg: "Product updated successfully", updatedProduct });
+        res.status(200).json({ msg: "Product updated successfully" });
     } catch (error) {
         console.error(error);
         res.status(400).json({ msg: "Error in updating product", error: error.message });

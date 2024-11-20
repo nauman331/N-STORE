@@ -3,6 +3,8 @@ const generateAccessToken = require('../helpers/generateAccessToken');
 const bcrypt = require("bcrypt")
 const productModel = require("../models/productModel")
 const carouselModel = require("../models/carouselModel")
+const cloudinary = require("../helpers/cloudinaryConfig");
+const fs = require("fs");
 
 
 const register = async (req, res) => {
@@ -197,5 +199,39 @@ const getCart = async (req, res) => {
   }
 }
 
+const updateProfile = async (req, res) => {
+  try {
+    const {username, email, address, phone} = req.body
+    if(!username && !email && !address && !phone && !req.file) {
+      return res.status(400).json({msg: "At least one field is required"})
+    }
+    let updateData = {}
+    if(username) updateData.username = username;
+    if(email) updateData.email = email;
+    if(address) updateData.address = address;
+    if(phone) updateData.phone = phone;
 
-module.exports = {register, login, userdata, getProducts, getCarousel, addToCart, removeFromCart, getCart}
+    if(req.file){
+      const cloudinaryUploadResponse = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: "auto"
+      });
+      updateData.profile = cloudinaryUploadResponse.url
+    }
+     await userModel.findByIdAndUpdate(
+      req.user._id,
+      updateData,
+      {new: true}
+    );
+
+    res.status(200).json({msg: "user updated successfully"})
+
+  } catch (error) {
+    if (req.file) fs.unlinkSync(req.file.path);
+    res.status(400).json({msg: "Error While updating Profile"})
+  } finally {
+     
+    if (req.file) fs.unlinkSync(req.file.path);
+}
+}
+
+module.exports = {register, login, userdata, getProducts, getCarousel, addToCart, removeFromCart, getCart, updateProfile}

@@ -1,4 +1,4 @@
-import { AtSign, KeyRound, User, Phone, Upload, ClipboardType, LayoutList, HandCoins, Percent, ChartNoAxesCombined} from "lucide-react";
+import { AtSign, KeyRound, User, Phone, Upload, ClipboardType, LayoutList, HandCoins, Percent, ChartNoAxesCombined, House} from "lucide-react";
 
 
 const registerdata = [
@@ -82,5 +82,37 @@ const logindata = [
     },
   ]
 
+  const updateuserdata = [
+    {
+      icon: <Upload />,
+      type: 'file',
+      name: 'profile',
+      placeholder: 'Select Profile Pic'
+    },
+    {
+      icon: <User />,
+      type: 'text',
+      name: 'username',
+      placeholder: 'Enter your username'
+    },
+    {
+      icon: <AtSign />,
+      type: 'email',
+      name: 'email',
+      placeholder: 'Enter your email'
+    },
+    {
+      icon: <Phone />,
+      type: 'number',
+      name: 'phone',
+      placeholder: 'Enter your Phone Number'
+    },
+    {
+      icon: <House />,
+      type: 'string',
+      name: 'address',
+      placeholder: 'Enter your Address'
+    },
+  ];
 
-export { registerdata, logindata, productdata };
+export { registerdata, logindata, productdata, updateuserdata };
