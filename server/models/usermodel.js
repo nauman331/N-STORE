@@ -42,27 +42,37 @@ const userSchema = new mongoose.Schema({
     address : {
         type: String,
     },
-    orders : [
+    orders: [
         {
-            product : {
-                type: mongoose.SchemaTypes.ObjectId,
-                ref: "Product"
-            },
-            quantity : {
-                type: Number,
-                default: 1
-            },
-            total : {
-                type: Number,
-                default: 0
-            },
-            status : {
-                type: String,
-                enum: ["Processing", "Delivered", "Rejected"],
-                default: "Processing"
-            }
+          product: {
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "Product"
+          },
+          total: {
+            type: Number,
+            default: 0,
+            required: true
+          },
+          paid: {
+            type: Number,
+            default: 0,
+            required: true
+          },
+          status: {
+            type: String,
+            enum: ["Approving","Processing", "Delivered", "Rejected"],
+            default: "Approving"
+          },
+          proofpic: { 
+            type: String,
+            required: true
+          },
+          tId: {
+            type: String,
+            required: true
+          }
         }
-    ]
+      ]
 })
 
 const User = new mongoose.model('User', userSchema);

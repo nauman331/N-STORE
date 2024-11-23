@@ -3,12 +3,15 @@ import "../../assets/stylesheets/cart.scss";
 import { useSelector } from "react-redux";
 import { Trash2 } from "lucide-react";
 import { showPopup } from "react-popupify";
+import {NavLink} from "react-router-dom"
 import CustomPopup from "../../components/admincomponents/CustomPopup";
-const cart = () => {
+
+const Cart = () => {
   const token = useSelector((state) => state.auth.token);
   const AuthorizationToken = `Bearer ${token}`;
   const [cart, setCart] = useState([]);
   const [id, setId] = useState("");
+  const [totalDiscountedBill, setTotalDiscountedBill] = useState(0);
 
   const popup = (productId) => {
     setId(productId);
@@ -37,12 +40,19 @@ const cart = () => {
     getCart();
   }, [token]);
 
-  const removeFromCart = async () => {
+  // Calculate the total discounted bill
+  useEffect(() => {
+    const total = cart.reduce((acc, item) => {
+      const price = item.product.discountedprice
+        ? item.product.discountedprice
+        : item.product.price;
+      return acc + price * item.quantity;
+    }, 0);
+    setTotalDiscountedBill(total);
+  }, [cart]);
+
+     const removeFromCart = async () => {
     try {
-      if (!id) {
-        console.log("id is missing");
-        return;
-      }
       const response = await fetch(
         "http://localhost:3000/api/user/removefromcart",
         {
@@ -86,8 +96,9 @@ const cart = () => {
               </div>
 
               <div className="price">
+                <h5>Quantity: {item.quantity} </h5>
                 <h5>price: {item.product.price * item.quantity} Rs</h5>
-                {item.product.discountedprice  && (
+                {item.product.discountedprice && (
                   <h4>
                     discounted price:{" "}
                     {item.product.discountedprice * item.quantity} Rs
@@ -100,10 +111,11 @@ const cart = () => {
             </div>
           );
         })}
-        <button className="buy-now">BUY NOW</button>
+        <h5>Total Discounted Bill: {totalDiscountedBill} Rs</h5>
+        <NavLink to="/checkout" className="buy-now">BUY NOW</NavLink>
       </div>
     </>
   );
 };
 
-export default cart;
+export default Cart;

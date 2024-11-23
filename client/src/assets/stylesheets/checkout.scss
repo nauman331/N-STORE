@@ -1,0 +1,53 @@
+@import "./colors";
+
+.checkout {
+  @extend %flex;
+  gap: 3rem;
+  padding: 2rem;
+  flex-wrap: wrap;
+.box {
+  width: 300px;
+  border-radius: 10px;
+  border-bottom: 20px solid $color;
+  h5 {
+    color: $background;
+    background: $color;
+    padding: 10px 20px;
+    font-weight: 700;
+    border-radius: 10px 10px 0 0;
+  }
+  ul {
+    background: $background;
+    li {
+      list-style: none;
+      padding: 10px;
+      width: 100%;
+      background: $background;
+      transition: transform 0.5s;
+      span {
+        padding: .3rem .7rem;
+        line-height: 20px;
+        background: $orange;
+        color: $background;
+        display: inline-block;
+        border-radius: 50%;
+        margin-right: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+}
+
+.account-info{
+ text-align: center;
+}
+
+@media (max-width: 768px) {
+  .checkout {
+    flex-direction: column;
+  }
+
+}
