@@ -54,14 +54,6 @@ const AddProduct = () => {
             const res_data = await response.json();
             console.log(res_data);
             if (response.ok) {
-                
-                 setProduct({
-                    title: "",
-                    category: "",
-                    price: "",
-                    discountedprice: "",
-                    image: null,
-                });
                 alert("Product Uploaded");
             } else {
                 console.log(res_data.msg);

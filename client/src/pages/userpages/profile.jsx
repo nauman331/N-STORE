@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { showPopup } from "react-popupify";
 import CustomPopup from "../../components/admincomponents/CustomPopup";
 import { updateuserdata } from "../../helpers/forms";
-import { useState } from "react";
-import img from "../../assets/images/logo.jpeg"
+import { useState, useEffect } from "react";
+import img from "../../assets/images/logo.jpeg";
 
 const ProfilePage = () => {
   const [user, setUser] = useState({
@@ -14,7 +14,7 @@ const ProfilePage = () => {
     address: "",
     profile: null,
   });
-
+  const [orders, setOrders] = useState([]);
   const userdata = useSelector((state) => state.auth.userdata);
   const token = useSelector((state) => state.auth.token);
   const AuthorizationToken = `Bearer ${token}`;
@@ -22,6 +22,27 @@ const ProfilePage = () => {
   const popup = () => {
     showPopup("customPopupId", { open: true });
   };
+  const getorders = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/user/getorders", {
+        method: "GET",
+        headers: {
+          Authorization: AuthorizationToken,
+        },
+      });
+      if (response.ok) {
+        const res_data = await response.json();
+        setOrders(res_data.orders);
+        console.log(res_data.orders);
+      }
+    } catch (error) {
+      console.log("Error in getting orders items");
+    }
+  };
+
+  useEffect(() => {
+    getorders();
+  }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,13 +52,16 @@ const ProfilePage = () => {
     });
 
     try {
-      const response = await fetch("http://localhost:3000/api/user/updateprofile", {
-        method: "PUT",
-        headers: {
-          Authorization: AuthorizationToken, // Only include Authorization header
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "http://localhost:3000/api/user/updateprofile",
+        {
+          method: "PUT",
+          headers: {
+            Authorization: AuthorizationToken, // Only include Authorization header
+          },
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         const res_data = await response.json();
@@ -109,6 +133,8 @@ const ProfilePage = () => {
 
         {/* Orders Section */}
         <section className="orders">
+          <h2>Order History</h2>
+
           <div className="order-item">
             <p>
               <strong>Extra Details</strong>
@@ -117,23 +143,39 @@ const ProfilePage = () => {
               Address:{" "}
               {userdata?.address || "Add address from Edit Profile Button"}
             </p>
-            <p>Phone: +92 {userdata?.phone || "Not Provided"}</p>
+            <p>Phone: {userdata?.phone || "Not Provided"}</p>
           </div>
+
           <h2>Order History</h2>
-          <div className="order-item">
-            <p>
-              <strong>Order: Jacket</strong>
-            </p>
-            <p>Status: Delivered</p>
-            <p>Date: 2024-11-15</p>
-          </div>
-          <div className="order-item">
-            <p>
-              <strong>Order: Roller Skates</strong>
-            </p>
-            <p>Status: Processing</p>
-            <p>Date: 2024-11-18</p>
-          </div>
+
+          {orders.map((order) => (
+            <div className="order-item" key={order._id}>
+              <p>
+                <strong>Order ID: {order._id}</strong>
+              </p>
+              <p>
+                Status: <span className="status">{order.status}</span>
+              </p>
+              <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
+
+              <div className="products">
+                {order.products.map((product, index) => (
+                  <div key={product._id || index} className="product-item">
+                    <img src={product.image} alt={product.title} />
+                    <p>
+                      <strong>{product.title}</strong>
+                    </p>
+                    <p>Price: {product.price}</p>
+                    <p>Category: {product.category}</p>
+                    <p>
+                      Discounted Price:{" "}
+                      {product.discountedPrice || "No discount"}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </section>
       </div>
     </>

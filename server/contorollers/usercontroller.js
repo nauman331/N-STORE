@@ -204,7 +204,6 @@ const getCart = async (req, res) => {
   }
 };
 
-
 const updateProfile = async (req, res) => {
   try {
     const { username, email, address, phone } = req.body;
@@ -249,56 +248,89 @@ const updateProfile = async (req, res) => {
 
 const checkout = async (req, res) => {
   try {
-    const { total, paid, tid } = req.body;
+    const { total, tId } = req.body;
 
-    // Validate that all required fields are present
-    if (!total || !paid || !tid) {
-      return res.status(400).json({ msg: "Error while fetching data. Please try again!" });
+    if (!total || !tId) {
+      return res.status(400).json({
+        msg: "Error while fetching data. Missing required fields: total, paid, or transaction ID.",
+      });
     }
 
-    // Validate that a payment screenshot is uploaded
     if (!req.file) {
       return res.status(400).json({ msg: "Please upload a screenshot as payment proof." });
     }
 
-    // Find the user by their ID
     const user = await userModel.findById(req.user._id);
     if (!user) {
       return res.status(400).json({ msg: "User not found. Please log in again." });
     }
 
+    if (user.cart.length === 0) {
+      return res.status(400).json({ msg: "Your cart is empty, please add something to cart." });
+    }
+
+    // Upload the payment proof if present
+    let proofpic = null;
     if (req.file) {
-      const cloudinaryUploadResponse = await cloudinary.uploader.upload(
-        req.file.path,
-        {
-          resource_type: "auto",
-        }
-      );
+      const cloudinaryUploadResponse = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: "auto",
+      });
       proofpic = cloudinaryUploadResponse.url;
     }
 
+    // Calculate paid amount (5% of total)
+    const paid = total * 5 / 100;
+
+    // Create new order with multiple products
     const newOrder = {
-      products: user.cart,
+      products: user.cart.map(item => item.product), // Push all product references from the cart
       total,
       paid,
       proofpic,
-      tid,
+      tId,
       status: "Approving",
     };
 
+    // Push the new order to the user's orders array
     user.orders.push(newOrder);
-
-    user.cart = [];
+    user.cart = []; // Clear the cart after creating the order
 
     await user.save();
 
-    res.status(200).json({ msg: "Checkout successful, awaiting payment verification" });
+    return res.status(201).json({ msg: "Checkout successful, awaiting payment verification" });
 
   } catch (error) {
     console.error(error);
-    res.status(400).json({ msg: "Error while processing the checkout. Please try again!" });
+    if (req.file) fs.unlinkSync(req.file.path);
+    return res.status(500).json({
+      msg: "Error while processing the checkout. Please try again!",
+    });
+  } finally {
+    if (req.file) fs.unlinkSync(req.file.path);
   }
 };
+
+const getOrders = async (req, res) => {
+  try {
+    const user = await userModel
+      .findById(req.user._id)
+      .populate({
+        path: "orders.products",  
+        model: "Product",          
+      });
+
+    if (!user) {
+      return res.status(400).json({ msg: "User Not Found. Please Log In again!" });
+    }
+
+    res.status(200).json({ orders: user.orders });
+  } catch (error) {
+    res.status(400).json({ msg: "Error in getting ordered items" });
+  }
+};
+
+
+
 
 module.exports = {
   register,
@@ -310,5 +342,6 @@ module.exports = {
   removeFromCart,
   getCart,
   updateProfile,
-  checkout
+  checkout,
+  getOrders
 };

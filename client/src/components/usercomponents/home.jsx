@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Carousel from "./carousel";
 import "../../assets/stylesheets/products.scss";
-import { ShoppingCart } from "lucide-react";
 import { useSelector } from "react-redux";
 import {useNavigate} from "react-router-dom"
 import { showPopup } from "react-popupify";
@@ -59,6 +58,7 @@ const Home = () => {
       });
       if (response.ok) {
         const res_data = await response.json();
+        showPopup("customPopupId", { open: false });
         console.log(res_data);
       }
     } catch (error) {

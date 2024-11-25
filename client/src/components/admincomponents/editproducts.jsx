@@ -75,19 +75,9 @@ const EditProducts = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Log the product and id for debugging
-    console.log("Product to update:", product);
-    console.log("Product ID before submitting:", id);
-
-    if (!id) {
-      alert("Product ID is missing. Please try again.");
-      return;
-    }
-
-    // Prepare the payload
     const payload = {
-      id, // Product ID
-      ...product, // Other fields
+      id, 
+      ...product,
     };
 
     try {
@@ -97,7 +87,7 @@ const EditProducts = () => {
           method: "PUT",
           headers: {
             Authorization: authorizationToken,
-            "Content-Type": "application/json", // Send JSON
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(payload),
         }
@@ -115,7 +105,8 @@ const EditProducts = () => {
           stock: "",
         });
         alert("Product Updated Successfully");
-        getAllProducts(); // Refresh product list
+        showPopup("customPopupId", { open: false });
+        getAllProducts()
       } else {
         alert(res_data.msg || "Failed to update product");
         console.log("Error:", res_data.msg);

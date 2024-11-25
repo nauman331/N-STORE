@@ -36,13 +36,12 @@
         font-weight: 600;
         transform: translateY(-2px);
       }
+      strong {
+        color: $orange;
+      }
     }
   }
 }
-}
-
-.account-info{
- text-align: center;
 }
 
 @media (max-width: 768px) {

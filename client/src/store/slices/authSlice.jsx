@@ -5,6 +5,7 @@ export const authSlice = createSlice({
   initialState : {
     token: null,
     userdata: null,
+    totaldiscountedcartamount: null
   },
   reducers: {
     setCredentials: (state, action) => {
@@ -16,11 +17,15 @@ export const authSlice = createSlice({
     logOut: (state) => {
       state.userdata = null;
       state.token = null;
+    },
+    setTotalDiscountedCartAmount: (state, action) => {
+      const {totaldiscountedcartamount} = action.payload;
+      state.totaldiscountedcartamount = totaldiscountedcartamount
     }
   },
 
   
 });
 
-export const { setCredentials, logOut } = authSlice.actions;
+export const { setCredentials, logOut, setTotalDiscountedCartAmount } = authSlice.actions;
 export default authSlice.reducer;

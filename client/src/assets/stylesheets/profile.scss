@@ -61,6 +61,13 @@
         margin-bottom: 20px;
         color: $color;
       }
+      .product-item {
+        img {
+          height: 5rem;
+          width: 5rem;
+        }
+      }
+    
   
       .order-item {
         background-color: $background;
@@ -68,7 +75,9 @@
         margin-bottom: 15px;
         border-radius: 8px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  
+        .status {
+          color: $orange;
+        }
         p {
           margin: 5px 0;
           color: #555;

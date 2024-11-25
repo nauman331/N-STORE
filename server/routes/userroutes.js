@@ -22,6 +22,7 @@ router.post(
   authController.removeFromCart
 );
 router.get("/getcart", authenticateToken, authController.getCart);
+router.get("/getorders", authenticateToken, authController.getOrders);
 router.post(
   "/checkout",
   authenticateToken,

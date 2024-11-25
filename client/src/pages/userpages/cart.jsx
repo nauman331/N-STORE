@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import "../../assets/stylesheets/cart.scss";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Trash2 } from "lucide-react";
 import { showPopup } from "react-popupify";
-import {NavLink} from "react-router-dom"
+import { NavLink } from "react-router-dom";
 import CustomPopup from "../../components/admincomponents/CustomPopup";
+import { setTotalDiscountedCartAmount } from "../../store/slices/authSlice";
 
 const Cart = () => {
+  const dispatch = useDispatch(); 
+  const totaldiscountedcartamount = useSelector((state) => state.auth.totaldiscountedcartamount);
   const token = useSelector((state) => state.auth.token);
   const AuthorizationToken = `Bearer ${token}`;
   const [cart, setCart] = useState([]);
   const [id, setId] = useState("");
-  const [totalDiscountedBill, setTotalDiscountedBill] = useState(0);
+
 
   const popup = (productId) => {
     setId(productId);
@@ -40,7 +43,6 @@ const Cart = () => {
     getCart();
   }, [token]);
 
-  // Calculate the total discounted bill
   useEffect(() => {
     const total = cart.reduce((acc, item) => {
       const price = item.product.discountedprice
@@ -48,10 +50,12 @@ const Cart = () => {
         : item.product.price;
       return acc + price * item.quantity;
     }, 0);
-    setTotalDiscountedBill(total);
-  }, [cart]);
+    dispatch(
+      setTotalDiscountedCartAmount({ totaldiscountedcartamount: total })
+    ); 
+  }, [cart, dispatch]);
 
-     const removeFromCart = async () => {
+  const removeFromCart = async () => {
     try {
       const response = await fetch(
         "http://localhost:3000/api/user/removefromcart",
@@ -68,6 +72,7 @@ const Cart = () => {
         const res_data = await response.json();
         console.log(res_data);
         getCart();
+        showPopup("customPopupId", { open: false }); 
       }
     } catch (error) {
       console.log("Error in removing from cart");
@@ -86,7 +91,7 @@ const Cart = () => {
       </CustomPopup>
       <h1 className="addproduct-heading">Cart Items</h1>
       <div className="cart-boxes">
-        {cart.map((item) => {
+        {cart.length !== 0 ? cart.map((item) => {
           return (
             <div key={item._id} className="cart-box">
               <img src={item.product.image} alt="product image" />
@@ -110,9 +115,11 @@ const Cart = () => {
               </div>
             </div>
           );
-        })}
-        <h5>Total Discounted Bill: {totalDiscountedBill} Rs</h5>
-        <NavLink to="/checkout" className="buy-now">BUY NOW</NavLink>
+        }) : <h1 className="addproduct-heading">Your cart is empty</h1>}
+        <h5>Total Discounted Bill: {totaldiscountedcartamount} Rs</h5>
+        <NavLink to="/checkout" className="buy-now">
+          BUY NOW
+        </NavLink>
       </div>
     </>
   );
