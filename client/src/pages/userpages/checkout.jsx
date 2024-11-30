@@ -55,7 +55,7 @@ const Checkout = () => {
       if (response.ok) {
         alert("Proof Uploaded");
       } else {
-        console.log(res_data.msg);
+        console.log(res_data.message);
       }
     } catch (error) {
       console.log(error);

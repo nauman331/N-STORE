@@ -42,11 +42,11 @@ const login = () => {
             password: "",
           });
     
-          console.log(res_data.msg);
+          console.log(res_data.message);
           dispatch(setCredentials({ token: res_data.token}));
 
         } else {
-          console.log(res_data.msg);
+          console.log(res_data.message);
         }
       } catch (error) {
         console.log(error);

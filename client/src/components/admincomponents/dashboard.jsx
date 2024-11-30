@@ -33,7 +33,7 @@ const Dashboard = () => {
         setCarouselimage(null);
         alert("Carousel Image Uploaded");
       } else {
-        console.log(res_data.msg);
+        console.log(res_data.message);
       }
     } catch (error) {
       console.log(error);

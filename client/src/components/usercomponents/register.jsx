@@ -47,7 +47,7 @@ try {
       alert("Registered successfuly")
       navigate("/auth/login")
   }else{
-      console.log(res_data.msg)
+      console.log(res_data.message)
   }
 } catch (error) {
   console.log(error)

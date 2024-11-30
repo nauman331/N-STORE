@@ -8,23 +8,23 @@ const createProduct = async (req, res) => {
         const { title, category, price, discountedprice, stock } = req.body;
 
         if (!req.file) {
-            return res.status(400).json({ msg: 'No file uploaded' });
+            return res.status(400).json({ message: 'No file uploaded' });
         }
 
         if (!title || !category || !price || !stock) {
-            return res.status(400).json({ msg: 'Fill all the fields properly' });
+            return res.status(400).json({ message: 'Fill all the fields properly' });
         }
 
         // Validate price and stock
         if (isNaN(price) || isNaN(stock)) {
-            return res.status(400).json({ msg: "Prices and stock should be valid numbers" });
+            return res.status(400).json({ message: "Prices and stock should be valid numbers" });
         }
 
         if (discountedprice && isNaN(discountedprice)) {
-            return res.status(400).json({ msg: "Discounted price should be a valid number" });
+            return res.status(400).json({ message: "Discounted price should be a valid number" });
         }
         if(discountedprice && discountedprice > price){
-            return res.status(400).json({msg: "Discounted Price should be less than original price"})
+            return res.status(400).json({message: "Discounted Price should be less than original price"})
         }
         const cloudinaryUploadResponse = await cloudinary.uploader.upload(req.file.path, {
             resource_type: "auto"
@@ -41,11 +41,11 @@ const createProduct = async (req, res) => {
             image: imgURL
         });
 
-        res.status(200).json({ msg: "Product uploaded successfully" });
+        res.status(200).json({ message: "Product uploaded successfully" });
     } catch (error) {
         if (req.file) fs.unlinkSync(req.file.path);
         console.error("Error in uploading product:", error);
-        res.status(400).json({ msg: "Error in uploading new product", error });
+        res.status(400).json({ message: "Error in uploading new product", error });
     } finally {
         if (req.file) fs.unlinkSync(req.file.path);
     }
@@ -56,7 +56,7 @@ const createProduct = async (req, res) => {
 const addCarosel = async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ msg: 'No file uploaded' });
+            return res.status(400).json({ message: 'No file uploaded' });
         }
         const cloudinaryUploadResponse = await cloudinary.uploader.upload(req.file.path, {
             resource_type: "auto"
@@ -67,11 +67,11 @@ const addCarosel = async (req, res) => {
         await carouselModel.create({
             carouselImage,
         })
-        res.status(200).json({msg: "Carousel Image Uploaded Successfully!"})
+        res.status(200).json({message: "Carousel Image Uploaded Successfully!"})
 
     } catch (error) {
         if (req.file) fs.unlinkSync(req.file.path);
-        return res.status(400).json({msg: "Error occured while uploading", error})
+        return res.status(400).json({message: "Error occured while uploading", error})
     } finally {
      
         if (req.file) fs.unlinkSync(req.file.path);
@@ -81,11 +81,11 @@ const addCarosel = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
       const {id} = req.body;
-          if(!id) {return res.status(400).json({msg: "Error in getting the required product"})};
+          if(!id) {return res.status(400).json({message: "Error in getting the required product"})};
       await productModel.deleteOne({_id: id});
-      res.status(200).json({ msg: "Product deleted successfully" });
+      res.status(200).json({ message: "Product deleted successfully" });
     } catch (error) {
-      res.status(400).json({msg: "Error in getting all products", error: error.message})
+      res.status(400).json({message: "Error in getting all products", error: error.message})
     }
   }
 
@@ -93,13 +93,13 @@ const deleteCarousel = async (req, res) => {
     try {
         const { id } = req.body;
         if (!id) {
-            return res.status(400).json({ msg: "Error in getting the required carousel" });
+            return res.status(400).json({ message: "Error in getting the required carousel" });
         }
         await carouselModel.deleteOne({ _id: id });
-        res.status(200).json({ msg: "Carousel deleted successfully" });
+        res.status(200).json({ message: "Carousel deleted successfully" });
     } catch (error) {
         console.error(error);  
-        res.status(500).json({ msg: "Error in deleting Carousel Images", error: error.message });
+        res.status(500).json({ message: "Error in deleting Carousel Images", error: error.message });
     }
 };
 
@@ -113,7 +113,7 @@ const updateProduct = async (req, res) => {
 
         // Check if at least one field is provided for updating
         if (!title && !category && !price && !stock && !discountedprice) {
-            return res.status(400).json({ msg: 'At least one field is required to update' });
+            return res.status(400).json({ message: 'At least one field is required to update' });
         }
 
         // Create an object to store fields that need to be updated
@@ -134,10 +134,10 @@ const updateProduct = async (req, res) => {
             { new: true }  // Return the updated product
         );
 
-        res.status(200).json({ msg: "Product updated successfully" });
+        res.status(200).json({ message: "Product updated successfully" });
     } catch (error) {
         console.error(error);
-        res.status(400).json({ msg: "Error in updating product", error: error.message });
+        res.status(400).json({ message: "Error in updating product", error: error.message });
     }
 };
 

@@ -108,8 +108,8 @@ const EditProducts = () => {
         showPopup("customPopupId", { open: false });
         getAllProducts()
       } else {
-        alert(res_data.msg || "Failed to update product");
-        console.log("Error:", res_data.msg);
+        alert(res_data.message || "Failed to update product");
+        console.log("Error:", res_data.message);
       }
     } catch (error) {
       console.log("Error updating product:", error);
