@@ -5,6 +5,8 @@ const productModel = require("../models/productModel");
 const carouselModel = require("../models/carouselModel");
 const cloudinary = require("../helpers/cloudinaryConfig");
 const fs = require("fs");
+const {v4: uuidv4} = require("uuid");
+const stripe = require("stripe")(process.env.STRIPE_SECRET)
 
 const register = async (req, res) => {
   try {
@@ -248,67 +250,58 @@ const updateProfile = async (req, res) => {
 
 const checkout = async (req, res) => {
   try {
-    const { total, tId } = req.body;
+    const { total, token } = req.body;
 
-    if (!total || !tId) {
-      return res.status(400).json({
-        message: "Error while fetching data. Missing required fields: total, paid, or transaction ID.",
-      });
+    if (!total) {
+      return res.status(400).json({ message: "Total not provided" });
+    }
+    if (!token) {
+      return res.status(400).json({ message: "Token not provided" });
     }
 
-    if (!req.file) {
-      return res.status(400).json({ message: "Please upload a screenshot as payment proof." });
-    }
+    const customer = await stripe.customers.create({
+      email: token.email,
+      source: token.id,
+    });
+
+    const charge = await stripe.charges.create(
+      {
+        amount: total * 100,
+        currency: "usd",
+        customer: customer.id,
+        receipt_email: token.email,
+      },
+      { idempotencyKey: uuidv4() }
+    );
 
     const user = await userModel.findById(req.user._id);
     if (!user) {
-      return res.status(400).json({ message: "User not found. Please log in again." });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    if (user.cart.length === 0) {
-      return res.status(400).json({ message: "Your cart is empty, please add something to cart." });
+    if (charge.status !== "succeeded") {
+      return res.status(400).json({ message: "Error during checkout" });
     }
 
-    // Upload the payment proof if present
-    let proofpic = null;
-    if (req.file) {
-      const cloudinaryUploadResponse = await cloudinary.uploader.upload(req.file.path, {
-        resource_type: "auto",
-      });
-      proofpic = cloudinaryUploadResponse.url;
-    }
-
-    // Calculate paid amount (5% of total)
-    const paid = total * 5 / 100;
-
-    // Create new order with multiple products
-    const newOrder = {
-      products: user.cart.map(item => item.product), // Push all product references from the cart
+    console.log(charge.receipt_url)
+    user.orders.push({
+      products: user.cart.map((item) => item.product),
       total,
-      paid,
-      proofpic,
-      tId,
-      status: "Approving",
-    };
+      reciept: charge.receipt_url
+    });
 
-    // Push the new order to the user's orders array
-    user.orders.push(newOrder);
-    user.cart = []; // Clear the cart after creating the order
-
+    // Clear the cart after successful order
+    user.cart = [];
     await user.save();
 
-    return res.status(201).json({ message: "Checkout successful, awaiting payment verification" });
-
+    res.status(201).json({ message: "Payment successful", charge });
   } catch (error) {
     console.error(error);
-    if (req.file) fs.unlinkSync(req.file.path);
-    return res.status(500).json({
-      message: "Error while processing the checkout. Please try again!",
-    });
-  } finally {
-    if (req.file) fs.unlinkSync(req.file.path);
+    res.status(500).json({ message: "Payment processing error" });
   }
 };
+
+
 
 const getOrders = async (req, res) => {
   try {

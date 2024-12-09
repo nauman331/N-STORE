@@ -85,7 +85,7 @@ const Home = () => {
           <div className="product-card" key={product.id}>
             <div className="edit">
               {product.discountedprice ? (
-                <h5>Save {product.price - product.discountedprice} Rs</h5>
+                <h5>Save {product.price - product.discountedprice} $</h5>
               ) : (
                 ""
               )}
@@ -109,12 +109,12 @@ const Home = () => {
                 {product.discountedprice ? (
                   <>
                     <span className="discounted-price">
-                      {product.discountedprice} Rs
+                      {product.discountedprice} $
                     </span>
-                    <span className="original-price">{product.price} Rs</span>
+                    <span className="original-price">{product.price} $</span>
                   </>
                 ) : (
-                  <>{product.price} Rs</>
+                  <>{product.price} $</>
                 )}
               </h2>
               <button onClick={() => popup(product._id)} className="buy">

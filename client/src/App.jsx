@@ -12,7 +12,6 @@ import Editproducts from "./components/admincomponents/editproducts"
 import Cart from "./pages/userpages/cart"
 import "react-popupify/dist/bundle.css";
 import Profile from "./pages/userpages/profile"
-import Checkout from "./pages/userpages/checkout"
 
 
 function App() {
@@ -25,7 +24,6 @@ function App() {
       <Route path="home" element={<Home />} />
       <Route path="profile" element={<Profile />} />
       <Route path="cart" element={<Cart />} />
-      <Route path="checkout" element={<Checkout />} />
       </Route>
 
 

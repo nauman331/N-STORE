@@ -16,29 +16,19 @@
     border-radius: 5px;
     cursor: pointer;
     img {
-      height: 10rem;
-      width: 10rem;
+      height: 8rem;
+      width: 8rem;
     }
     .delete {
       color: $orange;
     }
   }
-  .buy-now {
-    @extend %flex;
-    background-color: $orange;
-    border: 2px solid $orange;
-    color: $color;
-    width: 7rem;
-    padding: 0.4rem;
-    border-radius: 5px;
-    cursor: pointer;
-    &:hover {
-      background-color: transparent;
-      color: $orange;
-    }
-  }
 }
-
+.center {
+  @extend %flex;
+  flex-direction: column;
+  gap: .5rem;
+}
 @media (max-width: 768px) {
   .cart-box {
     font-size: smaller;

@@ -5,6 +5,9 @@ const carouselSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    cloudinaryId : {
+        type: String
+    }
 })
 
 const CarouselSchema = new mongoose.model("Carousel", carouselSchema);

@@ -30,7 +30,6 @@ router.get("/getorders", authenticateToken, authController.getOrders);
 router.post(
   "/checkout",
   authenticateToken,
-  uploadMiddleware.single("proofpic"),
   authController.checkout
 );
 

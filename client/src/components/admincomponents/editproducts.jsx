@@ -148,7 +148,7 @@ const EditProducts = () => {
           <div className="product-card" key={product._id}>
             <div className="edit">
               {product.discountedprice && (
-                <h5>Save {product.price - product.discountedprice} Rs</h5>
+                <h5>Save {product.price - product.discountedprice} $</h5>
               )}
               <span className="edit-icon">
                 <Pencil onClick={() => popup(product._id)} />
@@ -167,12 +167,12 @@ const EditProducts = () => {
                 {product.discountedprice ? (
                   <>
                     <span className="discounted-price">
-                      {product.discountedprice} Rs
+                      {product.discountedprice} $
                     </span>
-                    <span className="original-price">{product.price} Rs</span>
+                    <span className="original-price">{product.price} $</span>
                   </>
                 ) : (
-                  <>{product.price} Rs</>
+                  <>{product.price} $</>
                 )}
               </h2>
               <button onClick={() => handleDelete(product._id)} className="buy">

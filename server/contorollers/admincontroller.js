@@ -23,14 +23,15 @@ const createProduct = async (req, res) => {
         if (discountedprice && isNaN(discountedprice)) {
             return res.status(400).json({ message: "Discounted price should be a valid number" });
         }
-        if(discountedprice && discountedprice > price){
-            return res.status(400).json({message: "Discounted Price should be less than original price"})
+        if (discountedprice && discountedprice > price) {
+            return res.status(400).json({ message: "Discounted Price should be less than original price" });
         }
+
         const cloudinaryUploadResponse = await cloudinary.uploader.upload(req.file.path, {
             resource_type: "auto"
         });
 
-        const imgURL = cloudinaryUploadResponse.url;
+        const { secure_url: image, cloudinaryId: public_id } = cloudinaryUploadResponse;
 
         await productModel.create({
             title,
@@ -38,7 +39,8 @@ const createProduct = async (req, res) => {
             price,
             discountedprice,
             stock,
-            image: imgURL
+            image,
+            public_id,
         });
 
         res.status(200).json({ message: "Product uploaded successfully" });
@@ -51,26 +53,24 @@ const createProduct = async (req, res) => {
     }
 };
 
-
-
 const addCarosel = async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
+            return res.status(400).json({ message: 'No file selected' });
         }
         const cloudinaryUploadResponse = await cloudinary.uploader.upload(req.file.path, {
             resource_type: "auto"
         });
 
-        const carouselImage = cloudinaryUploadResponse.url;
+        const {secure_url: carouselImage, cloudinaryId: public_id} = cloudinaryUploadResponse;
 
         await carouselModel.create({
             carouselImage,
+            public_id
         })
         res.status(200).json({message: "Carousel Image Uploaded Successfully!"})
 
     } catch (error) {
-        if (req.file) fs.unlinkSync(req.file.path);
         return res.status(400).json({message: "Error occured while uploading", error})
     } finally {
      
@@ -80,14 +80,28 @@ const addCarosel = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-      const {id} = req.body;
-          if(!id) {return res.status(400).json({message: "Error in getting the required product"})};
-      await productModel.deleteOne({_id: id});
-      res.status(200).json({ message: "Product deleted successfully" });
+        const { id } = req.body;
+        if (!id) {
+            return res.status(400).json({ message: "Error in getting the required product" });
+        }
+
+        const product = await productModel.findById(id);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        // Delete image from Cloudinary
+        if (product.cloudinaryId) {
+            await cloudinary.uploader.destroy(product.cloudinaryId);
+        }
+
+        await productModel.deleteOne({ _id: id });
+        res.status(200).json({ message: "Product deleted successfully" });
     } catch (error) {
-      res.status(400).json({message: "Error in getting all products", error: error.message})
+        res.status(400).json({ message: "Error in deleting product", error: error.message });
     }
-  }
+};
+
 
 const deleteCarousel = async (req, res) => {
     try {
@@ -95,11 +109,22 @@ const deleteCarousel = async (req, res) => {
         if (!id) {
             return res.status(400).json({ message: "Error in getting the required carousel" });
         }
+
+        const carousel = await carouselModel.findById(id);
+        if (!carousel) {
+            return res.status(404).json({ message: "Carousel not found" });
+        }
+
+        // Delete image from Cloudinary
+        if (carousel.cloudinaryId) {
+            await cloudinary.uploader.destroy(carousel.cloudinaryId);
+        }
+
         await carouselModel.deleteOne({ _id: id });
         res.status(200).json({ message: "Carousel deleted successfully" });
     } catch (error) {
-        console.error(error);  
-        res.status(500).json({ message: "Error in deleting Carousel Images", error: error.message });
+        console.error(error);
+        res.status(500).json({ message: "Error in deleting carousel", error: error.message });
     }
 };
 

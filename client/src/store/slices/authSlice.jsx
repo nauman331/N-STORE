@@ -18,14 +18,10 @@ export const authSlice = createSlice({
       state.userdata = null;
       state.token = null;
     },
-    setTotalDiscountedCartAmount: (state, action) => {
-      const {totaldiscountedcartamount} = action.payload;
-      state.totaldiscountedcartamount = totaldiscountedcartamount
-    }
   },
 
   
 });
 
-export const { setCredentials, logOut, setTotalDiscountedCartAmount } = authSlice.actions;
+export const { setCredentials, logOut } = authSlice.actions;
 export default authSlice.reducer;

@@ -22,7 +22,8 @@ const ProfilePage = () => {
   const popup = () => {
     showPopup("customPopupId", { open: true });
   };
-  const getorders = async () => {
+
+  const getOrders = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/user/getorders", {
         method: "GET",
@@ -32,16 +33,19 @@ const ProfilePage = () => {
       });
       if (response.ok) {
         const res_data = await response.json();
-        setOrders(res_data.orders);
-        console.log(res_data.orders);
+        const uniqueOrders = Array.from(
+          new Set(res_data.orders.map((order) => order._id))
+        ).map((id) => res_data.orders.find((order) => order._id === id));
+        setOrders(uniqueOrders);
+        console.log("Orders fetched:", uniqueOrders);
       }
     } catch (error) {
-      console.log("Error in getting orders items");
+      console.error("Error in getting orders:", error);
     }
   };
 
   useEffect(() => {
-    getorders();
+    getOrders();
   }, [token]);
 
   const handleSubmit = async (e) => {
@@ -57,7 +61,7 @@ const ProfilePage = () => {
         {
           method: "PUT",
           headers: {
-            Authorization: AuthorizationToken, // Only include Authorization header
+            Authorization: AuthorizationToken,
           },
           body: formData,
         }
@@ -83,7 +87,7 @@ const ProfilePage = () => {
     }
   };
 
-  const HandleInput = (e) => {
+  const handleInput = (e) => {
     const { name, value } = e.target;
     if (name === "profile") {
       setUser({ ...user, [name]: e.target.files[0] });
@@ -105,7 +109,7 @@ const ProfilePage = () => {
                   type={data.type}
                   name={data.name}
                   placeholder={data.placeholder}
-                  onChange={HandleInput}
+                  onChange={handleInput}
                 />
               </div>
             ))}
@@ -146,18 +150,18 @@ const ProfilePage = () => {
             <p>Phone: {userdata?.phone || "Not Provided"}</p>
           </div>
 
-          <h2>Order History</h2>
-
           {orders.map((order) => (
             <div className="order-item" key={order._id}>
               <p>
                 <strong>Order ID: {order._id}</strong>
               </p>
               <p>
-                Status: <span className="status">{order.status}</span>
+                {order.reciept && <a href={order.reciept} className="status">
+                  Check Receipt Online
+                </a>}
               </p>
-              <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-
+              <p>Order Placed: {new Date(order.createdAt).toLocaleDateString()}</p>
+              <p>Order Status: {order.status}</p>
               <div className="products">
                 {order.products.map((product, index) => (
                   <div key={product._id || index} className="product-item">
@@ -165,12 +169,7 @@ const ProfilePage = () => {
                     <p>
                       <strong>{product.title}</strong>
                     </p>
-                    <p>Price: {product.price}</p>
                     <p>Category: {product.category}</p>
-                    <p>
-                      Discounted Price:{" "}
-                      {product.discountedPrice || "No discount"}
-                    </p>
                   </div>
                 ))}
               </div>

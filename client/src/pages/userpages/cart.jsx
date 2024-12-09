@@ -1,27 +1,24 @@
 import { useEffect, useState } from "react";
 import "../../assets/stylesheets/cart.scss";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Trash2 } from "lucide-react";
 import { showPopup } from "react-popupify";
-import { NavLink } from "react-router-dom";
 import CustomPopup from "../../components/admincomponents/CustomPopup";
-import { setTotalDiscountedCartAmount } from "../../store/slices/authSlice";
+import Stripe from "react-stripe-checkout";
 
 const Cart = () => {
-  const dispatch = useDispatch(); 
-  const totaldiscountedcartamount = useSelector((state) => state.auth.totaldiscountedcartamount);
   const token = useSelector((state) => state.auth.token);
   const AuthorizationToken = `Bearer ${token}`;
   const [cart, setCart] = useState([]);
   const [id, setId] = useState("");
+  const [totalDiscountedAmount, setTotalDiscountedAmount] = useState(0);
 
-
-  const popup = (productId) => {
+  const showConfirmationPopup = (productId) => {
     setId(productId);
     setTimeout(() => showPopup("customPopupId", { open: true }), 0);
   };
 
-  const getCart = async () => {
+  const fetchCart = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/user/getcart", {
         method: "GET",
@@ -30,96 +27,116 @@ const Cart = () => {
         },
       });
       if (response.ok) {
-        const res_data = await response.json();
-        setCart(res_data.cart);
-        console.log(res_data.cart);
+        const data = await response.json();
+        setCart(data.cart);
+      } else {
+        console.error("Failed to fetch cart items");
       }
     } catch (error) {
-      console.log("Error in getting cart items");
+      console.error("Error fetching cart items:", error);
     }
   };
 
   useEffect(() => {
-    getCart();
+    fetchCart();
   }, [token]);
 
   useEffect(() => {
-    const total = cart.reduce((acc, item) => {
-      const price = item.product.discountedprice
-        ? item.product.discountedprice
-        : item.product.price;
-      return acc + price * item.quantity;
-    }, 0);
-    dispatch(
-      setTotalDiscountedCartAmount({ totaldiscountedcartamount: total })
-    ); 
-  }, [cart, dispatch]);
+    const calculateTotal = () => {
+      const total = cart.reduce((acc, item) => {
+        const price = item.product.discountedprice || item.product.price;
+        return acc + price * item.quantity;
+      }, 0);
+      setTotalDiscountedAmount(total);
+    };
+    calculateTotal();
+  }, [cart]);
 
-  const removeFromCart = async () => {
+  const removeCartItem = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/user/removefromcart",
-        {
-          method: "POST",
-          headers: {
-            Authorization: AuthorizationToken,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ productId: id }),
-        }
-      );
+      const response = await fetch("http://localhost:3000/api/user/removefromcart", {
+        method: "POST",
+        headers: {
+          Authorization: AuthorizationToken,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId: id }),
+      });
       if (response.ok) {
-        const res_data = await response.json();
-        console.log(res_data);
-        getCart();
-        showPopup("customPopupId", { open: false }); 
+        await fetchCart();
+        showPopup("customPopupId", { open: false });
+      } else {
+        console.error("Failed to remove item from cart");
       }
     } catch (error) {
-      console.log("Error in removing from cart");
+      console.error("Error removing item from cart:", error);
+    }
+  };
+
+  const handleToken = async (token) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/user/checkout", {
+        method: "POST",
+        headers: {
+          Authorization: AuthorizationToken,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ total: totalDiscountedAmount, token }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Payment Successful:", data);
+        setCart([]);
+      } else {
+        console.error("Payment failed");
+      }
+    } catch (error) {
+      console.error("Error processing payment:", error);
     }
   };
 
   return (
     <>
       <CustomPopup>
-        <h5 className="addproduct-heading">
-          Are you sure you want to Remove Item from Cart?
-        </h5>
-        <button className="add-to-cart" onClick={() => removeFromCart()}>
-          Remove From Cart
+        <h5 className="popup-heading">Remove Item from Cart?</h5>
+        <button className="remove-button" onClick={removeCartItem}>
+          Remove
         </button>
       </CustomPopup>
       <h1 className="addproduct-heading">Cart Items</h1>
       <div className="cart-boxes">
-        {cart.length !== 0 ? cart.map((item) => {
-          return (
+        {cart.length > 0 ? (
+          cart.map((item) => (
             <div key={item._id} className="cart-box">
-              <img src={item.product.image} alt="product image" />
-              <div>
+              <img src={item.product.image} alt={item.product.title} />
+              <div className="item-info">
                 <h4>{item.product.title}</h4>
                 <h5>Category: {item.product.category}</h5>
               </div>
-
-              <div className="price">
-                <h5>Quantity: {item.quantity} </h5>
-                <h5>price: {item.product.price * item.quantity} Rs</h5>
+              <div className="price-info">
+                <h5>Quantity: {item.quantity}</h5>
+                <h5>Price: {item.product.price * item.quantity} $</h5>
                 {item.product.discountedprice && (
                   <h4>
-                    discounted price:{" "}
-                    {item.product.discountedprice * item.quantity} Rs
+                    Discounted Price: {item.product.discountedprice * item.quantity} $
                   </h4>
                 )}
               </div>
-              <div className="delete" onClick={() => popup(item.product._id)}>
+              <div className="delete" onClick={() => showConfirmationPopup(item.product._id)}>
                 <Trash2 />
               </div>
             </div>
-          );
-        }) : <h1 className="addproduct-heading">Your cart is empty</h1>}
-        <h5>Total Discounted Bill: {totaldiscountedcartamount} Rs</h5>
-        <NavLink to="/checkout" className="buy-now">
-          BUY NOW
-        </NavLink>
+          ))
+        ) : (
+          <h1>Your cart is empty</h1>
+        )}
+      </div>
+      <div className="center">
+      <h5>Total: {totalDiscountedAmount} $</h5>
+      <Stripe
+        token={handleToken}
+        stripeKey="pk_test_51NHdIECOfgM8oTpqt2elwgxv7MAxQhdJx82RBobQ0ikxupGUbUqsXUcjJPj64XOiQwPRcmRsAM4mI7yujZtQUIMA004jY72XSD"
+      />
       </div>
     </>
   );

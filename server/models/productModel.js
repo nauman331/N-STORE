@@ -13,6 +13,9 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  cloudinaryId: {
+    type: String,
+  },
   price: {
     type: Number,
     required: true,

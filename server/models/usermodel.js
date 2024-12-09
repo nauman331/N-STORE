@@ -53,32 +53,19 @@ const userSchema = new mongoose.Schema(
             ref: "Product",
           }
         ],
+        status : {
+          type: String,
+          enum: ["Placed", "Packed", "Shipped", "Rejected", "Recieved"],
+          default: "Placed"
+        },
         total: {
           type: Number,
           default: 0,
           required: true,
         },
-        paid: {
-          type: Number,
-          default: 0,
-          required: true,
-        },
-        status: {
+        reciept: {
           type: String,
-          enum: ["Approving", "Processing", "Delivered", "Rejected"],
-          default: "Approving",
-        },
-        proofpic: {
-          type: String,
-          required: function () {
-            return this.paid > 0;
-          },
-        },
-        tId: {
-          type: String,
-          required: function () {
-            return this.paid > 0;
-          },
+          default: ""
         },
         createdAt: {
           type: Date,
